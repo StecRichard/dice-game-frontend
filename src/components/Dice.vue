@@ -11,7 +11,6 @@ import dice3 from "../assets/dice3.png";
 import dice4 from "../assets/dice4.png";
 import dice5 from "../assets/dice5.png";
 import dice6 from "../assets/dice6.png";
-import getRandomNumbers from "../dice.services"
 
 export default {
   methods: {

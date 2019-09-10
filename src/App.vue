@@ -23,39 +23,36 @@
 
 <script>
 import Dice from "./components/Dice.vue";
-import { getRandomNumbers } from "./dice.services";
-import { throwDices } from "./dice.services";
+import { mapState } from 'vuex'
 
 export default {
   name: "app",
-  data: () => {
-    return {
-      numbers: null,
-      loading: false,
-      selectedDiceNumber: null
-    };
-  },
   components: {
     Dice
   },
   methods: {
     selectDice(indexInNumbers) {
-      var number = this.numbers[indexInNumbers];
-      if (this.loading) {
+      if (this.$store.state.loading) {
         return;
       }
-      console.log("Selecting dice with number:" + number);
-
-      this.selectedDiceNumber = number;
-      delete this.numbers[indexInNumbers];
+      
+      var selectedNumber = this.$store.state.numbers[indexInNumbers];
+      
+      this.$store.commit('changeSelectedDiceNumber', selectedNumber);
+      this.$store.commit('removeFromNumbers', indexInNumbers)
     },
     startThrow(){
-      throwDices(this);
+      this.$store.dispatch('throwDices')
     },
     throwDice(){
-      throwDices(this, 1);
+      this.$store.dispatch('throwDices', 1)
     }
-  }
+  },
+  computed: mapState([
+    'numbers',
+    'loading',
+    'selectedDiceNumber'
+  ])
 };
 </script>
 
