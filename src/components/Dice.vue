@@ -1,6 +1,6 @@
 <template>
-  <div class="diceConteiner">
-    <img :src="renderImg(number)" />
+  <div class="diceContainer">
+    <img :src="renderImg(number)" v-on:click="clickListenerHandler" />
   </div>  
 </template>
 
@@ -11,35 +11,37 @@ import dice3 from "../assets/dice3.png";
 import dice4 from "../assets/dice4.png";
 import dice5 from "../assets/dice5.png";
 import dice6 from "../assets/dice6.png";
+import getRandomNumbers from "../dice.services"
 
 export default {
   methods: {
-    renderImg: number => {
+    clickListenerHandler(event) {
+      if(this.$listeners.click){
+        this.$listeners.click(event)
+      } 
+    },
+    renderImg(number) {
       let diceImgArray = [dice1, dice2, dice3, dice4, dice5, dice6];
       return diceImgArray[number - 1];
     }
   },
   props: {
-    number: Number
+    number: Number,
+    loading: Boolean
   }
 };
 </script>
 
 <style scoped>
 img {
-  width: 100px;
-  height: 100px;
-  transition: width 0.5s, height 0.5s;
+  transform:scale(0.4); transition:transform 0.5s linear;
 }
 
 img:hover {
-  width: 150px;
-  height: 150px;
-  transition: width 0.5s, height 0.5s;
+  transform: scale(0.6);
 }
 
-.diceConteiner {
-  height: 150px;
-  width: 150px;
+.diceContainer {
+  margin: 0 auto;
 }
 </style>

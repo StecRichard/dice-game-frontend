@@ -1,78 +1,69 @@
 <template>
   <div id="app">
-    <h1>Mezi kozy</h1>
-    <h1>{{numbers}}</h1>
-    <div class="dicesConteiner">
-      <dice v-on:click="selectDice" :key="index" :number="number" v-for="(number, index) in numbers" />
-    </div>
-
+    <h1>Kostky</h1>
     <div>
-      <button v-on:click="throwDices">Throw Dices</button>
+      <button v-if="!loading" v-on:click="startThrow">Throw</button>
     </div>
 
-    <!-- <HelloWorld msg="Welcome to Your Vue.js App" /> -->
+    <div class="dicesContainer">
+      <dice
+        v-on:click="selectDice(index)"
+        :key="index"
+        :loading="loading"
+        :number="number"
+        v-for="(number, index) in numbers"
+      />
+    </div>
+
+    <div v-if="selectedDiceNumber" class="dicesContainer" v-on:click="throwDice">
+      <dice :number="selectedDiceNumber"/>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
 import Dice from "./components/Dice.vue";
-import axios from "axios";
+import { getRandomNumbers } from "./dice.services";
+import { throwDices } from "./dice.services";
 
 export default {
   name: "app",
   data: () => {
     return {
       numbers: null,
-      loading: false
+      loading: false,
+      selectedDiceNumber: null
     };
   },
   components: {
-    HelloWorld,
     Dice
   },
   methods: {
-    selectDice() {
-    },
-    throwDices() {
-      if(this.loading){ 
-        return 
+    selectDice(indexInNumbers) {
+      var number = this.numbers[indexInNumbers];
+      if (this.loading) {
+        return;
       }
+      console.log("Selecting dice with number:" + number);
 
-      this.loading = true;
-
-      let intervalId = setInterval(() => {
-        if(this.loading){
-          if(!this.numbers){ 
-            this.numbers = [1,1,1]
-          }
-          
-          this.numbers = this.numbers.map(element => {            
-            element = Math.floor(Math.random() * (7 - 2) + 2); 
-            return element
-          }); 
-        } else {
-          clearInterval(intervalId)
-        }
-      }, 100)
-
-      setTimeout(() => {
-        axios
-          .get("http://localhost:3000/dices")
-          .then(
-            response => {
-              this.numbers = response.data
-              this.loading = false
-            }
-              
-          );
-      }, 3000);
+      this.selectedDiceNumber = number;
+      delete this.numbers[indexInNumbers];
+    },
+    startThrow(){
+      throwDices(this);
+    },
+    throwDice(){
+      throwDices(this, 1);
     }
   }
 };
 </script>
 
 <style>
+button {
+  margin: 20px;
+}
+
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -82,7 +73,9 @@ export default {
   margin-top: 60px;
 }
 
-.dicesConteiner {
+.dicesContainer {
+  width: 50%;
+  margin: 0 auto;
   display: flex;
 }
 </style>
