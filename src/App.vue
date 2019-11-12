@@ -5,7 +5,7 @@
       <button v-if="!loading" v-on:click="startThrow">Throw</button>
     </div>
 
-    <div class="dicesContainer">
+    <div class="diceContainer">
       <dice
         v-on:click="selectDice(index)"
         :key="index"
@@ -15,7 +15,7 @@
       />
     </div>
 
-    <div v-if="selectedDiceNumber" class="dicesContainer" v-on:click="throwDice">
+    <div v-if="selectedDiceNumber" class="diceContainer" v-on:click="throwDice">
       <dice :number="selectedDiceNumber"/>
     </div>
   </div>
@@ -42,10 +42,10 @@ export default {
       this.$store.commit('removeFromNumbers', indexInNumbers)
     },
     startThrow(){
-      this.$store.dispatch('throwDices')
+      this.$store.dispatch('throwDice')
     },
     throwDice(){
-      this.$store.dispatch('throwDices', 1)
+      this.$store.dispatch('throwDice', 1)
     }
   },
   computed: mapState([
@@ -70,7 +70,7 @@ button {
   margin-top: 60px;
 }
 
-.dicesContainer {
+.diceContainer {
   width: 50%;
   margin: 0 auto;
   display: flex;

@@ -1,5 +1,5 @@
 <template>
-  <div class="diceContainer">
+  <div class="dieContainer">
     <img :src="renderImg(number)" v-on:click="clickListenerHandler" />
   </div>  
 </template>
@@ -40,7 +40,7 @@ img:hover {
   transform: scale(0.6);
 }
 
-.diceContainer {
+.dieContainer {
   margin: 0 auto;
 }
 </style>

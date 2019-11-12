@@ -1,33 +1,28 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
-import { throwDices } from "./dice.services";
+import { userActions } from "./userActions";
+import { gameActions } from "./gameActions";
+import { userMutations } from "./userMutations";
+import { gameMutations } from "./gameMutations";
 
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({
   state: {
+    user: null,
     numbers: null,
     loading: false,
-    selectedDiceNumber: null
+    selectedDiceNumber: null,
+    userLoading: true,
+    games: null,
+    currentGame: null
   },
   mutations: {
-    removeFromNumbers(state, indexInNumbers) {
-      delete state.numbers[indexInNumbers];
-    },
-    changeLoadingStatus(state, demandedStatus){
-      state.loading = demandedStatus
-    },
-    changeSelectedDiceNumber(state, selectedNumber){
-      state.selectedDiceNumber = selectedNumber
-    },
-    changeNumbers(state, numbers){
-      state.numbers = numbers
-    }
-
+    ...gameMutations,
+    ...userMutations
   },
   actions: {
-    throwDices (context, count = 3){
-      throwDices(count)
-    } 
+    ...gameActions,
+    ...userActions
   }
 })
